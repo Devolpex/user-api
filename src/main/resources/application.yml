@@ -14,9 +14,9 @@ spring:
     import: optional:configserver:http://localhost:8888
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:2000/usersdb
-    username: marouane
-    password: Marouane@2001
+    url: jdbc:mysql://localhost:3306/usersdb
+    username: root
+    password: root@@0603
   jpa:
     hibernate:
       ddl-auto: create
