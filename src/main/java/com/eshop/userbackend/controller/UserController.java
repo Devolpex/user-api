@@ -1,5 +1,6 @@
 package com.eshop.userbackend.controller;
 
+import com.eshop.userbackend.Exception.UserNotFoundException;
 import com.eshop.userbackend.dto.user.UserCreateDto;
 import com.eshop.userbackend.model.User;
 import com.eshop.userbackend.service.UserService;
@@ -51,5 +52,21 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers(){
         return ResponseEntity.ok(service.findAllUsers());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id){
+        service.deleteUserById(id);
+        return ResponseEntity.ok().build();
+    }
+    //Handle the Custom Exception if id Non-Existent
+    @ControllerAdvice
+    public class GlobalExceptionHandler {
+
+        @ExceptionHandler(UserNotFoundException.class)
+        @ResponseStatus(HttpStatus.NOT_FOUND)
+        public String handleUserNotFoundException(UserNotFoundException ex) {
+            return ex.getMessage();
+        }
     }
 }

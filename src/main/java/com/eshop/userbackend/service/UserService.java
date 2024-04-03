@@ -1,5 +1,6 @@
 package com.eshop.userbackend.service;
 
+import com.eshop.userbackend.Exception.UserNotFoundException;
 import com.eshop.userbackend.dto.user.UserCreateDto;
 import com.eshop.userbackend.model.User;
 import com.eshop.userbackend.repository.UserRepository;
@@ -44,5 +45,11 @@ public class UserService {
     }
     public boolean confirmPassword(String password,String confirm){
         return password.equals(confirm);
+    }
+    public void deleteUserById(long id) {
+        if (!repository.existsById(id)) {
+            throw new UserNotFoundException(id);
+        }
+        repository.deleteById(id);
     }
 }
