@@ -14,11 +14,32 @@ spring:
     import: optional:configserver:http://localhost:8888
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/usersdb
-    username: root
-    password: root@@0603
+    url: jdbc:mysql://localhost:2000/usersdb
+    username: marouane
+    password: Marouane@2001
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     database: mysql
     database-platform: org.hibernate.dialect.MySQLDialect
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: marouanedbibih.developer@gmail.com
+    password: hxrcboubnwyekkly
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+
+logging:
+  level:
+    com:
+      netflix:
+        eureka: ERROR
+  file:
+    name: e-shop-user-backend-errors.log
+    path: /var/log
