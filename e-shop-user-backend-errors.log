@@ -9825,3 +9825,4 @@ com.netflix.discovery.shared.transport.TransportException: Cannot execute reques
 2024-04-16T14:02:25.494+01:00  INFO 162067 --- [users] [DiscoveryClient-CacheRefreshExecutor-0] com.netflix.discovery.DiscoveryClient    : Application version is -1: false
 2024-04-16T14:02:25.494+01:00  INFO 162067 --- [users] [DiscoveryClient-CacheRefreshExecutor-0] com.netflix.discovery.DiscoveryClient    : Getting all instance registry info from the eureka server
 2024-04-16T14:02:25.526+01:00  INFO 162067 --- [users] [DiscoveryClient-CacheRefreshExecutor-0] com.netflix.discovery.DiscoveryClient    : The response status is 200
+2024-04-16T14:06:55.000+01:00  INFO 162067 --- [users] [AsyncResolver-bootstrap-executor-0] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
