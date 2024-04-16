@@ -45,17 +45,28 @@ public class AuthService {
                 .build();
         repository.save(user);
         var jwtToken = jwtService.generateToken(user);
-        return AuthResponse.builder().token(jwtToken).build();
+        return AuthResponse.builder().token(jwtToken).role(user.getRole()).build();
     }
 
-    public AuthResponse login(LoginRequest request) {
+    // public AuthResponse login(LoginRequest request) {
+    //     authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+    //             request.getEmail(),
+    //             request.getPassword()
+    //     ));
+    //     var user = repository.findByEmail(request.getEmail()).orElseThrow();
+    //     var jwtToken = jwtService.generateToken(user);
+    //     return AuthResponse.builder().token(jwtToken).role(user.getRole()).build();
+    // }
+
+    public User login(LoginRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 request.getEmail(),
                 request.getPassword()
         ));
         var user = repository.findByEmail(request.getEmail()).orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
-        return AuthResponse.builder().token(jwtToken).build();
+        // var jwtToken = jwtService.generateToken(user);
+        // return AuthResponse.builder().token(jwtToken).role(user.getRole()).build();
+        return user;
     }
 
     public String generateCodeValidation() {

@@ -32,6 +32,7 @@ public class ClientController {
     private final ClientService clientService;
     private final FileService fileService;
 
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @CrossOrigin(origins = "http://localhost:5173")

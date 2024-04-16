@@ -1,5 +1,7 @@
 package com.eshop.userbackend.response.auth;
 
+import java.util.ArrayList;
+import java.util.List;
 
 import com.eshop.userbackend.enums.Role;
 
@@ -12,7 +14,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthResponse {
+public class LoginResponse {
     private String token;
     private Role role;
+    private String success;
+    private String redirectTo;
+    private List<String> errors = new ArrayList<>();
+    
 }
