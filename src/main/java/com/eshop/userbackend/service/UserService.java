@@ -6,6 +6,7 @@ import com.eshop.userbackend.model.User;
 import com.eshop.userbackend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -15,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository repository;
+    private final PasswordEncoder passwordEncoder;
 
     public void saveUser(UserCreateDto userCreateDto){
         // Bcrypt Password
@@ -26,8 +28,8 @@ public class UserService {
         String lower_case_email = userCreateDto.getEmail().toLowerCase();
         // Save the data
         User user = User.builder()
-                .first_name(first_letter_upper_case_first_name)
-                .last_name(first_letter_upper_case_last_name)
+                .firstname(first_letter_upper_case_first_name)
+                .lastname(first_letter_upper_case_last_name)
                 .email(lower_case_email)
                 .phone(userCreateDto.getPhone())
                 .password(hashedPassword)
@@ -51,5 +53,9 @@ public class UserService {
             throw new UserNotFoundException(id);
         }
         repository.deleteById(id);
+    }
+
+    public String bcryptPassword(String password){
+        return passwordEncoder.encode(password);
     }
 }
