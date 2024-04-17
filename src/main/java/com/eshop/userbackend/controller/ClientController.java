@@ -1,8 +1,11 @@
 package com.eshop.userbackend.controller;
 
+import com.eshop.userbackend.dto.user.ClientDto;
+import com.eshop.userbackend.model.Client;
 import com.eshop.userbackend.request.client.ClientCreateRequest;
 import com.eshop.userbackend.request.client.ProfilePictureReq;
 import com.eshop.userbackend.response.client.ClientCreateResponse;
+import com.eshop.userbackend.response.client.ClientPageResponse;
 import com.eshop.userbackend.response.client.ProfilePictureRes;
 import com.eshop.userbackend.service.ClientService;
 import com.eshop.userbackend.service.FileService;
@@ -13,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +26,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 @RestController
 @RequestMapping("/api/clients")
@@ -85,5 +92,20 @@ public class ClientController {
                 .id(id)
                 .build());
     }
+
+    @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<ClientPageResponse> getClientsByPagination(@RequestParam(defaultValue = "1") int page) {
+        int size = 5;
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<ClientDto> clientPage = clientService.getClientsByPagination(pageable);
+        return ResponseEntity.status(HttpStatus.OK).body(ClientPageResponse.builder()
+                .clients(clientPage.getContent())
+                .currentPage(clientPage.getNumber() + 1)
+                .totalPages(clientPage.getTotalPages())
+                .build());
+    }
+
+
 
 }
