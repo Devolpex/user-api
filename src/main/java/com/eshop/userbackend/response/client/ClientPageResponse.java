@@ -18,36 +18,4 @@ public class ClientPageResponse {
     private int currentPage;
     private int totalPages;
 
-    public static Builder builder() {
-        return new Builder();
-    }
-
-    public static class Builder {
-        private List<ClientDto> clients;
-        private int currentPage;
-        private int totalPages;
-
-        public Builder clients(List<ClientDto> clients) {
-            this.clients = clients;
-            return this;
-        }
-
-        public Builder currentPage(int currentPage) {
-            this.currentPage = currentPage;
-            return this;
-        }
-
-        public Builder totalPages(int totalPages) {
-            this.totalPages = totalPages;
-            return this;
-        }
-
-        public ClientPageResponse build() {
-            ClientPageResponse response = new ClientPageResponse();
-            response.clients = this.clients;
-            response.currentPage = this.currentPage;
-            response.totalPages = this.totalPages;
-            return response;
-        }
-    }
 }

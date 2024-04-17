@@ -42,7 +42,7 @@ public class ClientController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @CrossOrigin(origins = "http://localhost:5173")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ClientCreateResponse> createClient(@RequestBody @Valid ClientCreateRequest request,
             BindingResult bindingResult) {
         List<String> errors = new ArrayList<>();
@@ -66,6 +66,7 @@ public class ClientController {
     }
 
     @PostMapping("/profile-picture") // Adjust the endpoint path as needed
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ProfilePictureRes> uploadProfilePicture(
             @RequestBody @Valid ProfilePictureReq request,
             BindingResult bindingResult,
