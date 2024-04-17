@@ -58,4 +58,8 @@ public class UserService {
     public String bcryptPassword(String password){
         return passwordEncoder.encode(password);
     }
+
+    public String firstLetterToUpperCase(String word){
+        return word.substring(0,1).toUpperCase() + word.substring(1);
+    }
 }

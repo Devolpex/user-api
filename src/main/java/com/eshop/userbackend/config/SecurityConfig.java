@@ -21,7 +21,8 @@ public class SecurityConfig {
     private static final String[] WHITE_LIST_URL = {
             "/api/auth/**",
             "/api/auth/psswd/**",
-            "/api/clients/**"
+            "/api/clients/**",
+            "api/admins/**",
     };
 
     @Bean
