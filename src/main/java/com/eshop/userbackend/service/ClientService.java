@@ -1,7 +1,10 @@
 package com.eshop.userbackend.service;
 
 import java.util.Date;
+import java.util.List;
 
+import com.eshop.userbackend.dto.user.ClientDto;
+import com.eshop.userbackend.dto.user.UserDTO;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +15,9 @@ import com.eshop.userbackend.model.User;
 import com.eshop.userbackend.repository.ClientRepository;
 import com.eshop.userbackend.repository.UserRepository;
 import com.eshop.userbackend.request.client.ClientCreateRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import lombok.RequiredArgsConstructor;
 
@@ -64,4 +70,18 @@ public class ClientService {
         Client client = clientRepository.findByUserEmail(email);
         return client;
     }
+    public List<Client> getAllClients(){
+        return clientRepository.findAll();
+    }
+
+    public Page<ClientDto> getClientsByPagination(Pageable pageable) {
+        Page<Client> clients = clientRepository.findAll(pageable);
+        return clients.map(this::convertToDTO);
+    }
+
+    private ClientDto convertToDTO(Client client) {
+        UserDTO userDTO = new UserDTO(client.getUser().getEmail(),client.getUser().getFirstname(),client.getUser().getLastname(),client.getUser().getImage(),client.getUser().getPassword(),client.getUser().getCreated_at(),client.getUser().getPhone());
+        return new ClientDto(client.getId(), client.getAuth(), userDTO);
+    }
+
 }
