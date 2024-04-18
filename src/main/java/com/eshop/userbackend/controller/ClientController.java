@@ -2,11 +2,14 @@ package com.eshop.userbackend.controller;
 
 import com.eshop.userbackend.dto.user.ClientDto;
 import com.eshop.userbackend.model.Client;
+import com.eshop.userbackend.model.User;
 import com.eshop.userbackend.request.client.ClientCreateRequest;
+import com.eshop.userbackend.request.client.ClientUpdateRequest;
 import com.eshop.userbackend.request.client.ProfilePictureReq;
 import com.eshop.userbackend.response.client.ClientCreateResponse;
 import com.eshop.userbackend.response.client.ClientDeleteResponse;
 import com.eshop.userbackend.response.client.ClientPageResponse;
+import com.eshop.userbackend.response.client.ClientUpdateResponse;
 import com.eshop.userbackend.response.client.ProfilePictureRes;
 import com.eshop.userbackend.service.ClientService;
 import com.eshop.userbackend.service.FileService;
@@ -135,6 +138,48 @@ public class ClientController {
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<ClientDto> clientPage = clientService.searchClients(search, pageable);
         return ResponseEntity.ok(clientPage);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ClientUpdateResponse> putAdmin(@PathVariable Long id,
+            @RequestBody @Valid ClientUpdateRequest request, BindingResult bindingResult) {
+        List<String> errors = new ArrayList<>();
+
+        Client client = clientService.findClientById(id);
+        if (client == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ClientUpdateResponse.builder()
+                    .errors(Collections.singletonList("Client not found")).build());
+        } else {
+            if (bindingResult.hasErrors()) {
+                errors = bindingResult.getAllErrors().stream().map(error -> error.getDefaultMessage())
+                        .collect(Collectors.toList());
+            }
+            if (request.getPassword() != null) {
+                if (!userService.confirmPassword(request.getPassword(), request.getConfirm_password())) {
+                    errors.add("Password confirmation does not match");
+                } else {
+                    request.setPassword(userService.bcryptPassword(request.getPassword()));
+                }
+            }
+            if (!errors.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ClientUpdateResponse.builder().errors(errors).build());
+            }
+
+            User user = client.getUser();
+            user.setFirstname(userService.firstLetterToUpperCase(request.getFirstname()));
+            user.setLastname(userService.firstLetterToUpperCase(request.getLastname()));
+            user.setEmail(request.getEmail().toLowerCase());
+            user.setPhone(request.getPhone());
+            if (request.getPassword() != null) {
+                user.setPassword(request.getPassword());
+            }
+            client.setUser(user);
+            clientService.updateClient(id, client);
+        }
+        return ResponseEntity.ok(ClientUpdateResponse.builder()
+        .success("Client updated successfully")
+        .redirectTo("/clients")
+        .build());
     }
 
 }
