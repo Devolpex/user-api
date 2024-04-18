@@ -2,6 +2,7 @@ package com.eshop.userbackend.service;
 
 import com.eshop.userbackend.Exception.UserNotFoundException;
 import com.eshop.userbackend.dto.user.UserCreateDto;
+import com.eshop.userbackend.dto.user.UserUpdateDto;
 import com.eshop.userbackend.model.User;
 import com.eshop.userbackend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -61,5 +62,21 @@ public class UserService {
 
     public String firstLetterToUpperCase(String word){
         return word.substring(0,1).toUpperCase() + word.substring(1);
+    }
+
+    public void updateUser( long id, UserUpdateDto userUpdateDto){
+
+        //fetch the existin client from database
+        User user = repository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+        user.setFirstname(userUpdateDto.getFirst_name().substring(0,1).toUpperCase() + userUpdateDto.getFirst_name().substring(1));
+        user.setLastname(userUpdateDto.getLast_name().substring(0,1).toUpperCase() + userUpdateDto.getLast_name().substring(1));
+        user.setPhone(userUpdateDto.getPhone());
+        repository.save(user);
+
+    }
+    public boolean PasswordIsEmpty(String password, String confirmpassword) {
+        if (password == null || confirmpassword == null || password.isEmpty() || confirmpassword.isEmpty()) {
+            return true;
+        } else return false;
     }
 }

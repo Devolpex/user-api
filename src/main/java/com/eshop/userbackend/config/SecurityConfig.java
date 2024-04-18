@@ -23,6 +23,7 @@ public class SecurityConfig {
             "/api/auth/psswd/**",
             "/api/clients/**",
             "api/admins/**",
+            "/api/users/**",
     };
 
     @Bean

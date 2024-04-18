@@ -2,12 +2,14 @@ package com.eshop.userbackend.controller;
 
 import com.eshop.userbackend.Exception.UserNotFoundException;
 import com.eshop.userbackend.dto.user.UserCreateDto;
+import com.eshop.userbackend.dto.user.UserUpdateDto;
 import com.eshop.userbackend.model.User;
 import com.eshop.userbackend.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -69,4 +71,38 @@ public class UserController {
             return ex.getMessage();
         }
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable long id, @RequestBody @Valid UserUpdateDto userUpdateDto, BindingResult bindingResult) {
+        Map<String, Object> errorsResponse = new HashMap<>();
+        List<String> validationsErrors = new ArrayList<>();
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        if (bindingResult.hasErrors()) {
+            validationsErrors = bindingResult.getAllErrors().stream().map(error -> error.getDefaultMessage()).collect(Collectors.toList());
+        }
+        // Check if passwords match and hash the new password
+        if (!userUpdateDto.getPassword().isEmpty()) {
+            if (userUpdateDto.getConfirm_password().isEmpty()) {
+                validationsErrors.add("Confirm password is required");
+            } else if (!service.confirmPassword(userUpdateDto.getPassword(), userUpdateDto.getConfirm_password())) {
+                validationsErrors.add("Password confirmation does not match");
+            } else {
+                userUpdateDto.setPassword(encoder.encode(userUpdateDto.getPassword()));
+            }
+        }
+        if (!validationsErrors.isEmpty()){
+            errorsResponse.put("errors",validationsErrors);
+            return ResponseEntity.badRequest().body(errorsResponse);
+        }
+        // Hash password if it's not empty
+        if (!service.PasswordIsEmpty(userUpdateDto.getPassword(), userUpdateDto.getConfirm_password())) {
+            encoder = new BCryptPasswordEncoder();
+            String hashedPassword = encoder.encode(userUpdateDto.getPassword());
+            userUpdateDto.setPassword(hashedPassword);
+        }
+        service.updateUser(id, userUpdateDto);
+        Map<String,String> successMessage = new HashMap<>();
+        successMessage.put("success","User updated successfuly");
+        return ResponseEntity.ok(successMessage);
+    }
 }
+
