@@ -21,26 +21,28 @@ public class SecurityConfig {
     private static final String[] WHITE_LIST_URL = {
             "/api/auth/**",
             "/api/auth/psswd/**",
+<<<<<<< HEAD
             "/api/clients/**",
             "api/admins/**",
             "/api/users/**",
+=======
+>>>>>>> 7fd598a748de57a3709ded1bc4533ed5ba0f3ef2
     };
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
-
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(req ->{
-                    req.requestMatchers(WHITE_LIST_URL)
-                            .permitAll()
-                            .anyRequest()
-                            .authenticated();
-                })
-                .sessionManagement(sess -> sess .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(WHITE_LIST_URL).permitAll()  // Permit all requests that match the whitelist
+                        .requestMatchers("/api/clients/**").hasAuthority("ADMIN")  // Admin access for /api/clients
+                        .anyRequest().authenticated()  // All other requests must be authenticated
+                )
+                .sessionManagement(sessionManagement ->
+                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Using stateless session
                 .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);  // Adding JWT filter
+
         return http.build();
     }
 }

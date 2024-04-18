@@ -2,10 +2,7 @@ package com.eshop.userbackend.model;
 
 import com.eshop.userbackend.enums.Auth;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -13,6 +10,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Getter
+@Setter
 @Table(name = "clients")
 @Builder
 public class Client {
@@ -21,7 +20,7 @@ public class Client {
     private long id;
     @Enumerated(EnumType.STRING)
     private Auth auth;
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
 
