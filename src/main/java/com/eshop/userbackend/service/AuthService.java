@@ -34,29 +34,11 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final CodeConfirmationRepository codeConfirmationRepository;
 
-    public AuthResponse register(RegisterRequest request) {
-        var user = User.builder()
-                .firstname(request.getFirstname())
-                .lastname(request.getLastname())
-                .email(request.getEmail())
-                .phone(request.getPhone())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.CLIENT)
-                .build();
+    public AuthResponse register(User user) {
         repository.save(user);
         var jwtToken = jwtService.generateToken(user);
         return AuthResponse.builder().token(jwtToken).role(user.getRole()).build();
     }
-
-    // public AuthResponse login(LoginRequest request) {
-    //     authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-    //             request.getEmail(),
-    //             request.getPassword()
-    //     ));
-    //     var user = repository.findByEmail(request.getEmail()).orElseThrow();
-    //     var jwtToken = jwtService.generateToken(user);
-    //     return AuthResponse.builder().token(jwtToken).role(user.getRole()).build();
-    // }
 
     public User login(LoginRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
@@ -99,7 +81,10 @@ public class AuthService {
     public void deleteCodeConfirmation(String email){
         codeConfirmationRepository.deleteCodeConfirmationsByClientEmail(email);
     }
-
+    public boolean comparePasswords(String rawPassword, String encodedPassword) {
+        // Compare raw password with encoded (hashed) password
+        return passwordEncoder.matches(rawPassword, encodedPassword);
+    }
 
 
 

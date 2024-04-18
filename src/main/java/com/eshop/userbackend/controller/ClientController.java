@@ -141,6 +141,7 @@ public class ClientController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ClientUpdateResponse> putAdmin(@PathVariable Long id,
             @RequestBody @Valid ClientUpdateRequest request, BindingResult bindingResult) {
         List<String> errors = new ArrayList<>();
@@ -183,6 +184,8 @@ public class ClientController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+
     public ResponseEntity<Client> getClientById(@PathVariable Long id) {
         Client client = clientService.findClientById(id);
         return ResponseEntity.ok(client);

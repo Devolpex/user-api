@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -55,6 +56,7 @@ public class AdminController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<AdminCreateResponse> postAdmin(@RequestBody @Valid AdminCreateRequest request,
             BindingResult bindingResult) {
 
@@ -91,12 +93,14 @@ public class AdminController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Admin> getAdminById(@PathVariable Long id) {
         Admin admin = adminService.findAdminById(id);
         return ResponseEntity.ok(admin);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<AdminUpdateResponse> putAdmin(@PathVariable Long id,
             @RequestBody @Valid AdminUpdateRequest request, BindingResult bindingResult) {
         List<String> errors = new ArrayList<>();
@@ -140,6 +144,7 @@ public class AdminController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<AdminDeleteResponse> deleteAdmin(@PathVariable Long id) {
         Admin admin = adminService.findAdminById(id);
         if (admin == null) {
@@ -157,6 +162,7 @@ public class AdminController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<AdminPageResponse> getAdminsByPagination(@RequestParam(defaultValue = "1") int page){
         int size = 5;
         Pageable pageable = PageRequest.of(page - 1, size);

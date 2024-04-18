@@ -21,7 +21,6 @@ public class SecurityConfig {
     private static final String[] WHITE_LIST_URL = {
             "/api/auth/**",
             "/api/auth/psswd/**",
-            "api/admins/**",
     };
 
     @Bean
@@ -31,6 +30,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(WHITE_LIST_URL).permitAll()  // Permit all requests that match the whitelist
                         .requestMatchers("/api/clients/**").hasAuthority("ADMIN")  // Admin access for /api/clients
+                        .requestMatchers("/api/admins/**").hasAnyAuthority("ADMIN")
                         .anyRequest().authenticated()  // All other requests must be authenticated
                 )
                 .sessionManagement(sessionManagement ->

@@ -19,6 +19,7 @@ public class UserService {
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
 
+    
     public void saveUser(UserCreateDto userCreateDto){
         // Bcrypt Password
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -78,5 +79,12 @@ public class UserService {
         if (password == null || confirmpassword == null || password.isEmpty() || confirmpassword.isEmpty()) {
             return true;
         } else return false;
+    }
+    public String findPasswordByEmail(String email) {
+        User user = repository.findByEmail(email).orElse(null);
+        if (user != null) {
+            return user.getPassword();
+        }
+        return null; 
     }
 }
