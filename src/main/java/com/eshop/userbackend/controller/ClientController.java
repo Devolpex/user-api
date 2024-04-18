@@ -14,6 +14,7 @@ import com.eshop.userbackend.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -106,6 +107,14 @@ public class ClientController {
                 .build());
     }
 
+    @GetMapping("/search")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Page<ClientDto>> searchClients(
+            @RequestParam String search,
+            @PageableDefault(size = 5) Pageable pageable) {
+        Page<ClientDto> clientPage = clientService.searchClients(search, pageable);
+        return ResponseEntity.ok(clientPage);
+    }
 
 
 }

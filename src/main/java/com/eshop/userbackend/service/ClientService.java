@@ -80,8 +80,25 @@ public class ClientService {
     }
 
     private ClientDto convertToDTO(Client client) {
-        UserDTO userDTO = new UserDTO(client.getUser().getEmail(),client.getUser().getFirstname(),client.getUser().getLastname(),client.getUser().getImage(),client.getUser().getPassword(),client.getUser().getCreated_at(),client.getUser().getPhone());
-        return new ClientDto(client.getId(), client.getAuth(), userDTO);
+        UserDTO user = UserDTO.builder()
+                .id(client.getUser().getId())
+                .lastname(client.getUser().getLastname())
+                .firstname(client.getUser().getFirstname())
+                .email(client.getUser().getEmail())
+                .phone(client.getUser().getPhone())
+                .image(client.getUser().getImage())
+                .created_at(client.getUser().getCreated_at())
+                .build();
+        ClientDto clientDto = ClientDto.builder()
+                .id(client.getId())
+                .auth(client.getAuth())
+                .user(user)
+                .build();
+        return clientDto;
+}
+    //search client by email first or last name
+    public Page<ClientDto> searchClients(String search, Pageable pageable) {
+        Page<Client> clients = clientRepository.findByEmailOrFirstNameOrLastName(search, pageable);
+        return clients.map(this::convertToDTO);
     }
-
 }

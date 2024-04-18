@@ -5,8 +5,7 @@ import lombok.*;
 import java.util.Date;
 @Data
 @AllArgsConstructor
-@Getter
-@Setter
+@Builder
 @NoArgsConstructor
 public class UserDTO {
     private long id;
@@ -19,16 +18,8 @@ public class UserDTO {
     private Date created_at;
 
 
-//used to handel reponse in api
-    public UserDTO(String email, String firstname, String lastname, String image, String password, Date createdAt ,String phone) {
-        this.lastname = lastname;
-        this.firstname = firstname;
-        this.email = email;
-        this.phone = phone;
-        this.password = password;
-        this.image = image;
-        this.created_at = createdAt;
-    }
+
+
 }
 
 
