@@ -133,6 +133,12 @@ public class ClientService {
         return clients.map(this::convertToDTO);
     }
 
+    public void updateClient(Long id, Client client) {
+        User user = client.getUser();
+        user.setUpdate_at(new Date());
+        userRepository.save(user);
+    }
+
 }
 
 
