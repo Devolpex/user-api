@@ -21,7 +21,7 @@ public class Client {
     private long id;
     @Enumerated(EnumType.STRING)
     private Auth auth;
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
 

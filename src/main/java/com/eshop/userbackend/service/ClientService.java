@@ -97,4 +97,35 @@ public class ClientService {
         return clientDto;
     }
 
+    public Client findClientById(long id) {
+        Client query = clientRepository.findById(id).orElse(null);
+        if (query == null) {
+            return null;
+        }
+        User user = User.builder()
+                .id(query.getUser().getId())
+                .firstname(query.getUser().getFirstname())
+                .lastname(query.getUser().getLastname())
+                .email(query.getUser().getEmail())
+                .phone(query.getUser().getPhone())
+                .role(query.getUser().getRole())
+                .created_at(query.getUser().getCreated_at())
+                .build();
+        Client client = Client.builder()
+            .id(query.getId())
+            .auth(query.getAuth())
+            .user(user)
+            .build();
+        return client;
+    }
+
+    public boolean deleteClient(long id) {
+        Client client = clientRepository.findById(id).orElse(null);
+        if (client != null) {
+            clientRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
 }

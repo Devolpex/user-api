@@ -5,6 +5,7 @@ import com.eshop.userbackend.model.Client;
 import com.eshop.userbackend.request.client.ClientCreateRequest;
 import com.eshop.userbackend.request.client.ProfilePictureReq;
 import com.eshop.userbackend.response.client.ClientCreateResponse;
+import com.eshop.userbackend.response.client.ClientDeleteResponse;
 import com.eshop.userbackend.response.client.ClientPageResponse;
 import com.eshop.userbackend.response.client.ProfilePictureRes;
 import com.eshop.userbackend.service.ClientService;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -107,6 +109,21 @@ public class ClientController {
                 .build());
     }
 
-
-
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<ClientDeleteResponse> deleteClient(@PathVariable Long id) {
+        Client client = clientService.findClientById(id);
+        if (client == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ClientDeleteResponse.builder()
+                    .errors(Collections.singletonList("Client not found")).build());
+        }
+        if (clientService.deleteClient(id) == false) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ClientDeleteResponse.builder()
+                    .errors(Collections.singletonList("Failed to delete client")).build());
+        }
+        return ResponseEntity.ok(ClientDeleteResponse.builder()
+                .success("Client deleted successfully")
+                .redirectTo("/clients")
+                .build());
+    }
 }
