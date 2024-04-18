@@ -182,4 +182,9 @@ public class ClientController {
         .build());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Client> getClientById(@PathVariable Long id) {
+        Client client = clientService.findClientById(id);
+        return ResponseEntity.ok(client);
+    }
 }
