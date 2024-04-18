@@ -15,6 +15,7 @@ import com.eshop.userbackend.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -40,7 +41,6 @@ public class ClientController {
     private final UserService userService;
     private final ClientService clientService;
     private final FileService fileService;
-
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -72,7 +72,7 @@ public class ClientController {
     public ResponseEntity<ProfilePictureRes> uploadProfilePicture(
             @RequestBody @Valid ProfilePictureReq request,
             BindingResult bindingResult,
-            @RequestParam("id") long id) throws IOException  { // Get the id as a request parameter
+            @RequestParam("id") long id) throws IOException { // Get the id as a request parameter
         List<String> errors = new ArrayList<>();
         if (bindingResult.hasErrors()) {
             errors = bindingResult.getAllErrors().stream().map(error -> error.getDefaultMessage())
@@ -87,7 +87,6 @@ public class ClientController {
 
         File profile_picture = fileService.convertToImage(request.getPicture(), id);
         String path = fileService.uploadToFolder(profile_picture, "src/uploads/profile-pictures");
-
 
         return ResponseEntity.ok(ProfilePictureRes.builder()
                 .picture(path)
@@ -126,4 +125,16 @@ public class ClientController {
                 .redirectTo("/clients")
                 .build());
     }
+
+    @GetMapping("/search")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Page<ClientDto>> searchClients(
+            @RequestParam String search,
+            @RequestParam(defaultValue = "1") int page) {
+        int size = 5;
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<ClientDto> clientPage = clientService.searchClients(search, pageable);
+        return ResponseEntity.ok(clientPage);
+    }
+
 }

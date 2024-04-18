@@ -74,10 +74,6 @@ public class ClientService {
         return clientRepository.findAll();
     }
 
-    public Page<ClientDto> getClientsByPagination(Pageable pageable) {
-        Page<Client> clients = clientRepository.findAll(pageable);
-        return clients.map(this::convertToDTO);
-    }
 
     private ClientDto convertToDTO(Client client) {
         UserDTO user = UserDTO.builder()
@@ -127,5 +123,16 @@ public class ClientService {
         }
         return false;
     }
+    public Page<ClientDto> getClientsByPagination(Pageable pageable) {
+        Page<Client> clients = clientRepository.findAll(pageable);
+        return clients.map(this::convertToDTO);
+    }
+    //search client by email first or last name
+    public Page<ClientDto> searchClients(String search, Pageable pageable) {
+        Page<Client> clients = clientRepository.findByEmailOrFirstNameOrLastName(search, pageable);
+        return clients.map(this::convertToDTO);
+    }
 
 }
+
+
