@@ -13,4 +13,5 @@ public class ClientDto {
     private long id;
     private Auth auth;
     private UserDTO user;
+
 }
