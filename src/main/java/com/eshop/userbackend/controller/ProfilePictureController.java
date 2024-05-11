@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
-@RequestMapping("/clients/profile-picture")
+@RequestMapping("/users-api/picture")
 @RequiredArgsConstructor
 public class ProfilePictureController {
 

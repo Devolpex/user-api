@@ -44,7 +44,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
-@RequestMapping("/api/admins")
+@RequestMapping("/users-api/admins")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:5173")
 public class AdminController {

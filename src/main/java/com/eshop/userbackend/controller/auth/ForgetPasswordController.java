@@ -25,7 +25,7 @@ import org.springframework.validation.BindingResult;
 
 
 @RestController
-@RequestMapping("/api/auth/psswd")
+@RequestMapping("/users-api/psswd")
 @RequiredArgsConstructor
 
 public class ForgetPasswordController {

@@ -37,7 +37,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 @RestController
-@RequestMapping("/api/clients")
+@RequestMapping("/users-api/clients")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:5173")
 public class ClientController {
