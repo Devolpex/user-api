@@ -14,22 +14,17 @@ import com.eshop.userservice.model.Client;
 import com.eshop.userservice.model.User;
 import com.eshop.userservice.request.client.ClientCreateRequest;
 import com.eshop.userservice.request.client.ClientUpdateRequest;
-import com.eshop.userservice.request.client.ProfilePictureReq;
 import com.eshop.userservice.response.client.ClientCreateResponse;
 import com.eshop.userservice.response.client.ClientDeleteResponse;
 import com.eshop.userservice.response.client.ClientPageResponse;
 import com.eshop.userservice.response.client.ClientUpdateResponse;
-import com.eshop.userservice.response.client.ProfilePictureRes;
 import com.eshop.userservice.service.ClientService;
-import com.eshop.userservice.service.FileService;
 import com.eshop.userservice.service.UserService;
 
-import java.io.File;
-import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -38,10 +33,10 @@ import org.springframework.data.domain.Pageable;
 @RestController
 @RequestMapping("/users-api/clients")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class ClientController {
     private final UserService userService;
     private final ClientService clientService;
-    private final FileService fileService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

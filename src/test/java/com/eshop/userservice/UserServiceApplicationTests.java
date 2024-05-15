@@ -1,10 +1,10 @@
-package com.eshop.userbackend;
+package com.eshop.userservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class UserBackendApplicationTests {
+class UserServiceApplicationTests {
 
 	@Test
 	void contextLoads() {

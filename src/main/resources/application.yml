@@ -6,7 +6,7 @@ eureka:
       defaultZone: http://localhost:8765/eureka/
 
 server:
-  port: 8011
+  port: 8082
 spring:
   application:
     name: users-service

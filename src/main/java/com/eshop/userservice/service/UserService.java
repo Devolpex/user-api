@@ -5,9 +5,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.eshop.userservice.Exception.UserNotFoundException;
 import com.eshop.userservice.dto.user.UserCreateDto;
 import com.eshop.userservice.dto.user.UserUpdateDto;
+import com.eshop.userservice.exception.UserNotFoundException;
 import com.eshop.userservice.model.User;
 import com.eshop.userservice.repository.UserRepository;
 

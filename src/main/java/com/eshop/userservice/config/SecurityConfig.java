@@ -16,28 +16,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final JwtAuthFilter jwtAuthFilter;
-    private final AuthenticationProvider authenticationProvider;
-    private static final String[] WHITE_LIST_URL = {
-            "/api/auth/**",
-            "/api/auth/psswd/**",
-            "api/admins/**",
-    };
+        @Bean
+        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+                http
+                                .csrf(AbstractHttpConfigurer::disable)
+                                .authorizeHttpRequests(authorize -> authorize
+                                                .requestMatchers("/users-api/**").permitAll()
+                                                .anyRequest().authenticated()
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(WHITE_LIST_URL).permitAll()  // Permit all requests that match the whitelist
-                        .requestMatchers("/api/clients/**").hasAuthority("ADMIN")  // Admin access for /api/clients
-                        .anyRequest().authenticated()  // All other requests must be authenticated
-                )
-                .sessionManagement(sessionManagement ->
-                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Using stateless session
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);  // Adding JWT filter
-
-        return http.build();
-    }
+                                );
+                return http.build();
+        }
 }

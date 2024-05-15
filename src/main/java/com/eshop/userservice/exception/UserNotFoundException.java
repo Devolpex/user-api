@@ -1,4 +1,4 @@
-package com.eshop.userservice.Exception;
+package com.eshop.userservice.exception;
 
 public class UserNotFoundException extends RuntimeException {
     public UserNotFoundException(Long id) {
