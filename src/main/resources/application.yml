@@ -6,15 +6,15 @@ eureka:
       defaultZone: http://localhost:8765/eureka/
 
 server:
-  port: 8011
+  port: 8082
 spring:
   application:
-    name: users
+    name: users-service
   config:
     import: optional:configserver:http://localhost:8888
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/usersdb?CreateDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:3306/users_database?CreateDatabaseIfNotExist=true
     username: marouane
     password: Marouane@2001
   jpa:
